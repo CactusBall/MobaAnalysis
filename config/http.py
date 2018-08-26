@@ -15,6 +15,9 @@ headers = {
     'Connecttion': 'keep-alive',
     'User-Agent': ua,
     'Accept-Language': accept_lang,
-    'referer': referer,
     'Accept-Encoding': accept_encoding
 }
+
+
+def get_url(path):
+    return 'https://%s/%s' % (host, path)
