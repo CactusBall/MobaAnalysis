@@ -1,4 +1,4 @@
-from config import r
+from config import redis
 
 
 def encode(value):
@@ -16,9 +16,9 @@ referer = 'https://game.weixin.qq.com/cgi-bin/h5/static/smobadynamic/index.html?
           '%2FmcsdHHNkchFsCy2kOKpRYiVDvUODlOzsDKWLelhtX&wx_header=1'
 accept_encoding = 'br, gzip, deflate'
 
-ua = encode(r.srandmember('wechat_game_uas', 1)[0])
-key = encode(r.get('wechat_game_key'))
-pass_ticket = encode(r.get('wechat_game_pass_ticket'))
+ua = encode(redis.srandmember('wechat_game_uas', 1)[0])
+key = encode(redis.get('wechat_game_key'))
+pass_ticket = encode(redis.get('wechat_game_pass_ticket'))
 uin = encode('MTEyNDEzMjI4MQ%3D%3D')
 pgv_pvid = encode('971741250')
 sd_cookie_crttime = encode('1530872150306')

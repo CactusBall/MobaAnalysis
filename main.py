@@ -1,10 +1,14 @@
 import requests
 from urllib import parse
 
+import config
+from config import duplicate
 from config.http import get_url, cookies, headers, pass_ticket
 
 
 def load_user_info(profile_id):
+    if duplicate.is_user_profile_has(profile_id):
+        return
     path = 'cgi-bin/gamewap/getprofile2'
     url = get_url(path)
     params = {
@@ -15,8 +19,9 @@ def load_user_info(profile_id):
         'QB': ''
     }
     r = requests.get(url=url, params=params, headers=headers, cookies=cookies, verify=False)
+    config.redis.hset()
     result = r.json()
-    print(result)
+    duplicate.record_profile(profile_id)
     return result
 
 
@@ -31,7 +36,7 @@ def load_user_game_list(open_id):
     }
     r = requests.get(url, params=params, headers=headers, cookies=cookies, verify=False)
     result = r.json()
-    print(result)
+    duplicate.record_openid(openid)
     return result
 
 
@@ -49,7 +54,7 @@ def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id):
     }
     r = requests.get(url=url, params=params, headers=headers, cookies=cookies, verify=False)
     result = r.json()
-    print(result)
+    duplicate.record_game(game_seq)
     return result
 
 
@@ -69,4 +74,3 @@ if info['errcode'] == 0:
             openid = get_openid_from_url(jump_url)
             r = load_user_game_list(openid)
             print(r)
-
