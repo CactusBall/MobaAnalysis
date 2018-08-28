@@ -24,6 +24,6 @@ pgv_pvid = encode('971741250')
 sd_cookie_crttime = encode('1530872150306')
 sd_userid = encode('34911530872150306')
 
-Res_UserInfo_Dir = '~/Documents/Moba/MobaUserInfo'
-Res_Battle_List_Dir = '~/Documents/Moba/MobaBattleList'
-Res_Battle_Detail_Dir = '~/Documents/Moba/MobaBattleDetail'
+Res_UserInfo_Dir = '/Users/emrys/Documents/Moba/MobaUserInfo'
+Res_Battle_List_Dir = '/Users/emrys/Documents/Moba/MobaBattleList'
+Res_Battle_Detail_Dir = '/Users/emrys/Documents/Moba/MobaBattleDetail'

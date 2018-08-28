@@ -31,12 +31,12 @@ def is_battle_has(game_seq):
 
 
 def record_profile(profile_id):
-    config.redis.hset(_profile_key, _user_profile(profile_id))
+    config.redis.hset(_profile_key, _user_profile(profile_id), profile_id)
 
 
 def record_openid(openid):
-    config.redis.hset(_openid_key, _user_openid(openid))
+    config.redis.hset(_openid_key, _user_openid(openid), openid)
 
 
 def record_game(game_seq):
-    config.redis.hset(_gameseq_key, _user_battle(game_seq))
+    config.redis.hset(_gameseq_key, _user_battle(game_seq), game_seq)
