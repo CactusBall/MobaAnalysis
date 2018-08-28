@@ -8,5 +8,6 @@ kombu==4.2.1
 pytz==2018.5
 redis==2.10.6
 requests==2.19.1
+simplejson==3.16.0
 urllib3==1.23
 vine==1.1.4
