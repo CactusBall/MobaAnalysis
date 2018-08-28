@@ -35,8 +35,8 @@ def load_user_info(profile_id):
         'QB': ''
     }
     r = requests.get(url=url, params=params, headers=headers, cookies=cookies, verify=False)
-    config.redis.hset()
     temp = r.json()
+    print(temp)
     errorcode = temp['errcode']
     if errorcode != 0:
         raise Exception
@@ -71,13 +71,7 @@ def load_user_game_list(open_id):
     with codecs.open(wfile, 'w', 'utf-8') as wf:
         wf.write(simplejson.dumps(temp, indent=2, sort_keys=True, ensure_ascii=False))
     duplicate.record_openid(open_id)
-    battle_list = temp['battle_info']['battle_list']
-    for battle in battle_list:
-        game_seq = battle['game_seq']
-        game_svr_entity = battle['game_svr_entity']
-        relay_svr_entity = battle['relay_svr_entity']
-        open_id = temp['user_info']['open_id']
-        return game_seq, game_svr_entity, relay_svr_entity, open_id
+    return temp['battle_info']['battle_list']
 
 
 def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id):
@@ -103,3 +97,5 @@ def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id):
     with codecs.open(wfile, 'w', 'utf-8') as wf:
         wf.write(simplejson.dumps(temp, indent=2, sort_keys=True, ensure_ascii=False))
     duplicate.record_game(game_seq)
+
+load_user_info('g1NlbysGi4KDI5aTA0V-65f9QlaA')
