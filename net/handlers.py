@@ -4,10 +4,9 @@ import os
 import requests
 import simplejson
 
-import config
 from config import duplicate, settings
 from config.http import get_url, headers, cookies, pass_ticket
-from net import get_openid_from_url
+from net import get_openid_from_url, get_profileid_from_url
 
 
 def _profile(profile_id):
@@ -71,7 +70,7 @@ def load_user_game_list(open_id):
     with codecs.open(wfile, 'w', 'utf-8') as wf:
         wf.write(simplejson.dumps(temp, indent=2, sort_keys=True, ensure_ascii=False))
     duplicate.record_openid(open_id)
-    return temp['battle_info']['battle_list']
+    return temp['battle_info']['battle_list'], open_id
 
 
 def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id):
@@ -97,5 +96,13 @@ def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id):
     with codecs.open(wfile, 'w', 'utf-8') as wf:
         wf.write(simplejson.dumps(temp, indent=2, sort_keys=True, ensure_ascii=False))
     duplicate.record_game(game_seq)
+    player_list = temp['user_battle_detail']
+    profile_ids = []
+    for player in player_list:
+        profile_url = player['profile_url']
+        profile_id = get_profileid_from_url(profile_url)
+        profile_ids.append(profile_id)
+    return profile_ids
+
 
 load_user_info('g1NlbysGi4KDI5aTA0V-65f9QlaA')
