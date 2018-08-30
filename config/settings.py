@@ -1,7 +1,7 @@
 from config import redis
 
 
-def encode(value):
+def _encode(value):
     if type(value) is bytes:
         return str(value, 'utf-8')
     return value
@@ -16,13 +16,13 @@ referer = 'https://game.weixin.qq.com/cgi-bin/h5/static/smobadynamic/index.html?
           '%2FmcsdHHNkchFsCy2kOKpRYiVDvUODlOzsDKWLelhtX&wx_header=1'
 accept_encoding = 'br, gzip, deflate'
 
-ua = encode(redis.srandmember('wechat_game_uas', 1)[0])
-key = encode(redis.get('wechat_game_key'))
-pass_ticket = encode(redis.get('wechat_game_pass_ticket'))
-uin = encode('MTEyNDEzMjI4MQ%3D%3D')
-pgv_pvid = encode('971741250')
-sd_cookie_crttime = encode('1530872150306')
-sd_userid = encode('34911530872150306')
+ua = _encode(redis.srandmember('wechat_game_uas', 1)[0])
+key = _encode(redis.get('wechat_game_key'))
+pass_ticket = _encode(redis.get('wechat_game_pass_ticket'))
+uin = _encode('MTEyNDEzMjI4MQ%3D%3D')
+pgv_pvid = _encode('971741250')
+sd_cookie_crttime = _encode('1530872150306')
+sd_userid = _encode('34911530872150306')
 
 Res_UserInfo_Dir = '/Users/emrys/Documents/Moba/MobaUserInfo'
 Res_Battle_List_Dir = '/Users/emrys/Documents/Moba/MobaBattleList'
