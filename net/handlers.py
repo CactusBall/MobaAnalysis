@@ -21,7 +21,7 @@ def _battle_info(game_seq):
     return 'battle_%s' % game_seq
 
 
-def load_user_info(profile_id):
+def load_user_info(profile_id, prox):
     if duplicate.is_user_profile_has(profile_id):
         return
     path = 'cgi-bin/gamewap/getprofile2'
@@ -33,7 +33,7 @@ def load_user_info(profile_id):
         'abt': '27',
         'QB': ''
     }
-    r = requests.get(url=url, params=params, headers=headers, cookies=cookies)
+    r = requests.get(url=url, params=params, headers=headers, cookies=cookies, proxies=prox)
     temp = r.json()
     error_code = temp['errcode']
     if error_code != 0:
@@ -50,7 +50,7 @@ def load_user_info(profile_id):
             return error_code, get_openid_from_url(jump_url)
 
 
-def load_user_game_list(open_id):
+def load_user_game_list(open_id, prox):
     if duplicate.is_user_openid_has(open_id):
         return
     path = 'cgi-bin/gamewap/getusermobagameindex'
@@ -62,7 +62,7 @@ def load_user_game_list(open_id):
         'uid': '',
         'pass_ticket': pass_ticket
     }
-    r = requests.get(url, params=params, headers=headers, cookies=cookies)
+    r = requests.get(url, params=params, headers=headers, cookies=cookies, proxies=prox)
     temp = r.json()
 
     error_code = temp['errcode']
@@ -74,7 +74,7 @@ def load_user_game_list(open_id):
     return error_code, temp['battle_info']['battle_list'], open_id
 
 
-def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id):
+def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id, prox):
     if duplicate.is_battle_has(game_seq):
         return
     path = 'cgi-bin/gamewap/getsmobabattledetail'
@@ -88,7 +88,7 @@ def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id):
         'key': '',
         'pass_ticket': pass_ticket
     }
-    r = requests.get(url=url, params=params, headers=headers, cookies=cookies)
+    r = requests.get(url=url, params=params, headers=headers, cookies=cookies, proxies=prox)
     temp = r.json()
     error_code = temp['errcode']
     if error_code == 0:

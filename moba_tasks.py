@@ -1,24 +1,22 @@
 import logging
-import random
-import time
 
 from celery import Celery
 from kombu import Queue, Exchange
 
-from net import handlers
+from net import handlers, proxies
 
 app = Celery('moba_tasks', backend='redis://localhost:6379/0', broker='redis://localhost:6379/0')
 
 
 @app.task
 def get_user_info(profile_id):
+    prox, ip = proxies.get_proxies()
     try:
-        error_code, openid = handlers.load_user_info(profile_id)
+        error_code, openid = handlers.load_user_info(profile_id, prox)
     except Exception:
-        time.sleep(random.randint(3, 5))
-        raise IOError
+        proxies.deprecate_ip(ip)
+        return False
     if error_code != 0:
-        time.sleep(random.randint(1, 2))
         return False
     get_battle_list.delay(openid)
     return True
@@ -27,17 +25,14 @@ def get_user_info(profile_id):
 @app.task
 def get_battle_list(openid):
     logging.info("get_battle_list %s " % openid)
-    time.sleep(random.randint(1, 2))
+    prox, ip = proxies.get_proxies()
     try:
-        error_code, battle_list, openid = handlers.load_user_game_list(openid)
+        error_code, battle_list, openid = handlers.load_user_game_list(openid, prox)
     except Exception:
-        time.sleep(random.randint(3, 5))
-        raise IOError
-    if error_code != 0:
-        time.sleep(random.randint(1, 2))
+        proxies.deprecate_ip(ip)
         return False
-    if error_code == 45009:
-        time.sleep(random.randint(3, 5))
+    if error_code != 0:
+        proxies.deprecate_ip(ip)
         return False
     for battle in battle_list:
         game_seq = battle['game_seq']
@@ -49,13 +44,14 @@ def get_battle_list(openid):
 
 @app.task
 def get_battle_info(game_seq, game_svr_entity, relay_svr_entity, openid):
+    prox, ip = proxies.get_proxies()
     try:
-        error_code, profile_ids = handlers.load_game_detail(game_seq, game_svr_entity, relay_svr_entity, openid)
+        error_code, profile_ids = handlers.load_game_detail(game_seq, game_svr_entity, relay_svr_entity, openid, prox)
     except Exception:
-        time.sleep(random.randint(3, 5))
-        raise IOError
+        proxies.deprecate_ip(ip)
+        raise False
     if error_code != 0:
-        time.sleep(random.randint(1, 2))
+        proxies.deprecate_ip(ip)
         return False
     for profile_id in profile_ids:
         get_user_info.delay(profile_id)
