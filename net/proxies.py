@@ -4,10 +4,9 @@ from config import redis
 
 _ip_pool = '_ip_pool'
 _deprecate_ip_pool = '_deprecate_ip_pool'
-_key_ip_pool_url = 'ip_pool_url'
 
 _ip_pool_url = 'http://dev.kdlapi.com/api/getproxy/'
-orderid = redis.get('_ip_pool_orderid')
+orderid = str(redis.get('_ip_pool_orderid'), 'utf-8')
 dedup = 1
 _key_dedup = 'dedup'
 pool_params = {
@@ -30,7 +29,8 @@ pool_params = {
 
 
 def get_proxies():
-    ip = str(redis.srandmember(_ip_pool, 1)[0], 'utf-8')
+    ip_r = redis.srandmember(_ip_pool, 1)
+    ip = str(ip_r[0], 'utf-8')
     proxies = {
         'http': 'http://%s' % ip
     }
@@ -41,7 +41,7 @@ def fill_ip():
     current_ip_count = redis.scard(_ip_pool)
     if current_ip_count > 50:
         return
-    url = redis.get(_key_ip_pool_url)
+    url = _ip_pool_url
     response = requests.get(url, params=pool_params)
     temp = response.json()
     ip_list = temp['data']['proxy_list']
@@ -62,8 +62,3 @@ def deprecate_ip(ip):
     redis.srem(_ip_pool, ip)
     redis.sadd(_deprecate_ip_pool, ip)
     fill_ip()
-
-
-# fill_ip()
-# print('a' in pool_params.keys())
-print(get_proxies())

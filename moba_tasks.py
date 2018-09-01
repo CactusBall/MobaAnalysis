@@ -1,5 +1,3 @@
-import logging
-
 from celery import Celery
 from kombu import Queue, Exchange
 
@@ -24,7 +22,6 @@ def get_user_info(profile_id):
 
 @app.task
 def get_battle_list(openid):
-    logging.info("get_battle_list %s " % openid)
     prox, ip = proxies.get_proxies()
     try:
         error_code, battle_list, openid = handlers.load_user_game_list(openid, prox)
