@@ -15,10 +15,10 @@ def get_user_info(profile_id):
     try:
         error_code, openid = handlers.load_user_info(profile_id)
     except Exception:
-        time.sleep(random.randint(40, 60))
+        time.sleep(random.randint(3, 5))
         raise IOError
     if error_code != 0:
-        time.sleep(random.randint(1, 20))
+        time.sleep(random.randint(1, 2))
         return False
     get_battle_list.delay(openid)
     return True
@@ -27,17 +27,17 @@ def get_user_info(profile_id):
 @app.task
 def get_battle_list(openid):
     logging.info("get_battle_list %s " % openid)
-    time.sleep(random.randint(1, 10))
+    time.sleep(random.randint(1, 2))
     try:
         error_code, battle_list, openid = handlers.load_user_game_list(openid)
     except Exception:
-        time.sleep(random.randint(10, 20))
+        time.sleep(random.randint(3, 5))
         raise IOError
     if error_code != 0:
-        time.sleep(random.randint(1, 10))
+        time.sleep(random.randint(1, 2))
         return False
     if error_code == 45009:
-        time.sleep(random.randint(10, 20))
+        time.sleep(random.randint(3, 5))
         return False
     for battle in battle_list:
         game_seq = battle['game_seq']
@@ -52,10 +52,10 @@ def get_battle_info(game_seq, game_svr_entity, relay_svr_entity, openid):
     try:
         error_code, profile_ids = handlers.load_game_detail(game_seq, game_svr_entity, relay_svr_entity, openid)
     except Exception:
-        time.sleep(random.randint(10, 20))
+        time.sleep(random.randint(3, 5))
         raise IOError
     if error_code != 0:
-        time.sleep(random.randint(1, 10))
+        time.sleep(random.randint(1, 2))
         return False
     for profile_id in profile_ids:
         get_user_info.delay(profile_id)

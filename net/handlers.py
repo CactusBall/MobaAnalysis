@@ -66,10 +66,10 @@ def load_user_game_list(open_id):
     temp = r.json()
 
     error_code = temp['errcode']
-    wfile = os.path.join(settings.Res_Battle_List_Dir, '%s.txt' % _profile(open_id))
-    with codecs.open(wfile, 'w', 'utf-8') as wf:
-        wf.write(simplejson.dumps(temp, indent=2, sort_keys=True, ensure_ascii=False))
     if error_code == 0:
+        wfile = os.path.join(settings.Res_Battle_List_Dir, '%s.txt' % _profile(open_id))
+        with codecs.open(wfile, 'w', 'utf-8') as wf:
+            wf.write(simplejson.dumps(temp, indent=2, sort_keys=True, ensure_ascii=False))
         duplicate.record_openid(open_id)
     return error_code, temp['battle_info']['battle_list'], open_id
 
@@ -91,12 +91,13 @@ def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id):
     r = requests.get(url=url, params=params, headers=headers, cookies=cookies)
     temp = r.json()
     error_code = temp['errcode']
-    wfile = os.path.join(settings.Res_Battle_Detail_Dir, '%s.txt' % _profile(game_seq))
-    with codecs.open(wfile, 'w', 'utf-8') as wf:
-        wf.write(simplejson.dumps(temp, indent=2, sort_keys=True, ensure_ascii=False))
     if error_code == 0:
         duplicate.record_game(game_seq)
     player_list = temp['normal_battle_detail']['user_battle_detail']
+    if len(player_list) != 0:
+        wfile = os.path.join(settings.Res_Battle_Detail_Dir, '%s.txt' % _profile(game_seq))
+        with codecs.open(wfile, 'w', 'utf-8') as wf:
+            wf.write(simplejson.dumps(temp, indent=2, sort_keys=True, ensure_ascii=False))
     profile_ids = []
     for player in player_list:
         profile_url = player['profile_url']
