@@ -1,6 +1,7 @@
 from celery import Celery
 from kombu import Queue, Exchange
 
+from config import duplicate
 from net import handlers, proxies
 
 app = Celery('moba_tasks', backend='redis://localhost:6379/0', broker='redis://localhost:6379/0')
@@ -10,49 +11,42 @@ app = Celery('moba_tasks', backend='redis://localhost:6379/0', broker='redis://l
 def get_user_info(profile_id):
     prox, ip = proxies.get_proxies()
     try:
-        error_code, openid = handlers.load_user_info(profile_id, prox)
-    except Exception:
-        proxies.deprecate_ip(ip)
-        return False
+        error_code, openid = handlers.load_user_info(profile_id, prox, ip)
+    except Exception as e:
+        return duplicate.is_user_profile_has(profile_id)
     if error_code != 0:
-        return False
-    get_battle_list.delay(openid)
-    return True
+        return 2
+    get_battle_list.delay(openid, prox, ip)
+    return 0
 
 
 @app.task
-def get_battle_list(openid):
-    prox, ip = proxies.get_proxies()
+def get_battle_list(openid, prox, ip):
     try:
-        error_code, battle_list, openid = handlers.load_user_game_list(openid, prox)
-    except Exception:
-        proxies.deprecate_ip(ip)
-        return False
+        error_code, battle_list, open_id = handlers.load_user_game_list(openid, prox, ip)
+    except Exception as e:
+        return duplicate.is_user_openid_has(openid)
     if error_code != 0:
-        proxies.deprecate_ip(ip)
-        return False
+        return 2
     for battle in battle_list:
         game_seq = battle['game_seq']
         game_svr_entity = battle['game_svr_entity']
         relay_svr_entity = battle['relay_svr_entity']
-        get_battle_info.delay(game_seq, game_svr_entity, relay_svr_entity, openid)
-    return True
+        get_battle_info.delay(game_seq, game_svr_entity, relay_svr_entity, open_id, prox, ip)
+    return 0
 
 
 @app.task
-def get_battle_info(game_seq, game_svr_entity, relay_svr_entity, openid):
-    prox, ip = proxies.get_proxies()
+def get_battle_info(game_seq, game_svr_entity, relay_svr_entity, openid, prox, ip):
     try:
-        error_code, profile_ids = handlers.load_game_detail(game_seq, game_svr_entity, relay_svr_entity, openid, prox)
-    except Exception:
-        proxies.deprecate_ip(ip)
-        raise False
+        error_code, profile_ids = handlers.load_game_detail(game_seq, game_svr_entity, relay_svr_entity, openid, prox, ip)
+    except Exception as e:
+        return duplicate.is_battle_has(game_seq)
     if error_code != 0:
-        proxies.deprecate_ip(ip)
-        return False
+        return 2
     for profile_id in profile_ids:
         get_user_info.delay(profile_id)
-    return True
+    return 0
 
 
 task_queues = (

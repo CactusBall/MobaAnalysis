@@ -1,5 +1,8 @@
 import codecs
+import logging
 import os
+import random
+import time
 
 import requests
 import simplejson
@@ -21,7 +24,7 @@ def _battle_info(game_seq):
     return 'battle_%s' % game_seq
 
 
-def load_user_info(profile_id, prox):
+def load_user_info(profile_id, prox, ip):
     if duplicate.is_user_profile_has(profile_id):
         return
     path = 'cgi-bin/gamewap/getprofile2'
@@ -50,7 +53,8 @@ def load_user_info(profile_id, prox):
             return error_code, get_openid_from_url(jump_url)
 
 
-def load_user_game_list(open_id, prox):
+def load_user_game_list(open_id, prox, ip):
+    time.sleep(random.randrange(1, 10))
     if duplicate.is_user_openid_has(open_id):
         return
     path = 'cgi-bin/gamewap/getusermobagameindex'
@@ -66,15 +70,17 @@ def load_user_game_list(open_id, prox):
     temp = r.json()
 
     error_code = temp['errcode']
-    if error_code == 0:
-        wfile = os.path.join(settings.Res_Battle_List_Dir, '%s.txt' % _profile(open_id))
-        with codecs.open(wfile, 'w', 'utf-8') as wf:
-            wf.write(simplejson.dumps(temp, indent=2, sort_keys=True, ensure_ascii=False))
-        duplicate.record_openid(open_id)
+    logging.warn('load_user_errorcode %s ip is %s' % (error_code, ip))
+    if error_code != 0:
+        raise Exception
+    wfile = os.path.join(settings.Res_Battle_List_Dir, '%s.txt' % _profile(open_id))
+    with codecs.open(wfile, 'w', 'utf-8') as wf:
+        wf.write(simplejson.dumps(temp, indent=2, sort_keys=True, ensure_ascii=False))
+    duplicate.record_openid(open_id)
     return error_code, temp['battle_info']['battle_list'], open_id
 
 
-def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id, prox):
+def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id, prox, ip):
     if duplicate.is_battle_has(game_seq):
         return
     path = 'cgi-bin/gamewap/getsmobabattledetail'

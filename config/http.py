@@ -15,6 +15,7 @@ headers = {
     'Connecttion': 'keep-alive',
     'User-Agent': ua,
     'Accept-Language': accept_lang,
+    'Referer': referer,
     'Accept-Encoding': accept_encoding
 }
 

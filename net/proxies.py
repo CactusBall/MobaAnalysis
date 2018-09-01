@@ -11,10 +11,12 @@ dedup = 1
 _key_dedup = 'dedup'
 pool_params = {
     'orderid': orderid,
-    'num': 100,
+    'num': 1000,
     'b_pcchrome': 1,
     'b_pcie': 1,
     'b_pcff': 1,
+    'b_android': 1,
+    'b_iphone': 1,
     'protocol': 1,
     'method': 2,
     'an_an': 1,
@@ -44,7 +46,9 @@ def fill_ip():
     url = _ip_pool_url
     response = requests.get(url, params=pool_params)
     temp = response.json()
+    print(temp)
     ip_list = temp['data']['proxy_list']
+    print('size %d' % len(ip_list))
     for ip in ip_list:
         if redis.sismember(_deprecate_ip_pool, ip):
             continue
@@ -52,13 +56,7 @@ def fill_ip():
     current_ip_count = redis.scard(_ip_pool)
     if current_ip_count < 50:
         pool_params[_key_dedup] = dedup
-        fill_ip()
     else:
         if _key_dedup in pool_params:
             pool_params.pop(_key_dedup)
 
-
-def deprecate_ip(ip):
-    redis.srem(_ip_pool, ip)
-    redis.sadd(_deprecate_ip_pool, ip)
-    fill_ip()
