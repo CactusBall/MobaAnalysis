@@ -10,10 +10,7 @@ def _encode(value):
 host = 'game.weixin.qq.com'
 accept = '*/*'
 accept_lang = 'zh-cn'
-referer = 'https://game.weixin.qq.com/cgi-bin/h5/static/smobadynamic/index.html?game_svr_entity=2230&game_seq' \
-          '=1535041351&relay_svr_entity=2618229376&openid=owanlsr79FJjp8n9KwkgaNwkthMA&zone_area_id=4050&ssid=1021' \
-          '&abtest_cookie=AwABAAoACwATAAMAI5ceAFeZHgBjmR4AAAA%3D&pass_ticket=VpPOrckIvPf%2F6NP0INdWsn' \
-          '%2FmcsdHHNkchFsCy2kOKpRYiVDvUODlOzsDKWLelhtX&wx_header=1'
+referer = 'https://game.weixin.qq.com/cgi-bin/h5/static/profile_v1/index.html?t=g1NlbysGi4KDI5aTA0V-65f9QlaA&ssid=2902&abt=27'
 accept_encoding = 'br, gzip, deflate'
 
 ua = _encode(redis.srandmember('wechat_game_uas', 1)[0])
@@ -27,3 +24,4 @@ sd_userid = _encode('34911530872150306')
 Res_UserInfo_Dir = '/Users/emrys/Documents/Moba/MobaUserInfo'
 Res_Battle_List_Dir = '/Users/emrys/Documents/Moba/MobaBattleList'
 Res_Battle_Detail_Dir = '/Users/emrys/Documents/Moba/MobaBattleDetail'
+Res_Game_Index_Dir = '/Users/emrys/Documents/Moba/MobaUserIndex'
