@@ -24,3 +24,4 @@ sd_userid = _encode('34911530872150306')
 Res_UserInfo_Dir = '/Users/emrys/Documents/Moba/MobaUserInfo'
 Res_Battle_List_Dir = '/Users/emrys/Documents/Moba/MobaBattleList'
 Res_Battle_Detail_Dir = '/Users/emrys/Documents/Moba/MobaBattleDetail'
+Res_Game_Index_Dir = '/Users/emrys/Documents/Moba/MobaUserIndex'
