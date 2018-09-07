@@ -74,6 +74,8 @@ def load_zone_area_id(open_id, prox, ip):
     temp = r.json()
     error_code = temp['errcode']
     logging.warn('load_zone_area_id errorcode %s ip is %s' % (error_code, ip))
+    if error_code == 4001:
+        time.sleep(60 * 60 * 24)
     if error_code != 0:
         raise Exception
     wfile = os.path.join(settings.Res_Game_Index_Dir, '%s.txt' % _profile(open_id))
@@ -89,7 +91,8 @@ def load_user_game_list(open_id, offset, zone_area_id, prox, ip):
         logging.warn('duplicate load_user_game_list %s' % open_id)
         return
     limit = 10
-    # time.sleep(random.randrange(1, 10))
+    # time.sleep(random.randrange(3, 4))
+    time.sleep(3)
     path = 'cgi-bin/gamewap/getusermobabattleinfolist'
     url = get_url(path)
 
@@ -107,6 +110,8 @@ def load_user_game_list(open_id, offset, zone_area_id, prox, ip):
     temp = r.json()
     error_code = temp['errcode']
     logging.warn('load_user_game_list errorcode %s ip is %s openid %s' % (error_code, ip, open_id))
+    if error_code == 4001:
+        time.sleep(60 * 60 * 24)
     if error_code != 0:
         raise Exception
     wfile = os.path.join(settings.Res_Battle_List_Dir, '%s.txt' % _profile(open_id))
@@ -137,6 +142,8 @@ def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id, prox,
     temp = r.json()
     error_code = temp['errcode']
     logging.warn('load_game_detail errorcode %s ip is %s' % (error_code, ip))
+    if error_code == 4001:
+        time.sleep(60 * 60 * 24)
     if error_code == 0:
         duplicate.record_game(game_seq)
     player_list = temp['normal_battle_detail']['user_battle_detail']

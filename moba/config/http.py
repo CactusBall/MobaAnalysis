@@ -1,4 +1,5 @@
-from config.settings import *
+from config.settings import key, pass_ticket, uin, pgv_pvid, sd_cookie_crttime, sd_userid, host, accept, ua, \
+    accept_lang, referer, accept_encoding
 
 cookies = {
     'key': key,
