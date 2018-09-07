@@ -2,7 +2,7 @@ from celery import Celery
 from kombu import Queue, Exchange
 
 from config import duplicate
-from net import handlers, proxies
+from net import proxies, handlers
 
 app = Celery('moba_tasks', backend='redis://localhost:6379/0', broker='redis://localhost:6379/0')
 
@@ -60,8 +60,8 @@ def get_battle_info(game_seq, game_svr_entity, relay_svr_entity, openid, prox, i
         return duplicate.is_battle_has(game_seq)
     if error_code != 0:
         return 2
-    for profile_id in profile_ids:
-        get_user_info.delay(profile_id)
+    # for profile_id in profile_ids:
+    #     get_user_info.delay(profile_id)
     return 0
 
 

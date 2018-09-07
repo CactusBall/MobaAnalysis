@@ -89,7 +89,7 @@ def load_user_game_list(open_id, offset, zone_area_id, prox, ip):
         logging.warn('duplicate load_user_game_list %s' % open_id)
         return
     limit = 10
-    # time.sleep(random.randrange(1, 10))
+    time.sleep(random.randrange(3, 4))
     path = 'cgi-bin/gamewap/getusermobabattleinfolist'
     url = get_url(path)
 
