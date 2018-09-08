@@ -74,7 +74,7 @@ def load_zone_area_id(open_id, prox, ip):
     temp = r.json()
     error_code = temp['errcode']
     logging.warn('load_zone_area_id errorcode %s ip is %s' % (error_code, ip))
-    if error_code == 4001:
+    if error_code == 40001:
         time.sleep(60 * 60 * 24)
     if error_code != 0:
         raise Exception
@@ -110,7 +110,7 @@ def load_user_game_list(open_id, offset, zone_area_id, prox, ip):
     temp = r.json()
     error_code = temp['errcode']
     logging.warn('load_user_game_list errorcode %s ip is %s openid %s' % (error_code, ip, open_id))
-    if error_code == 4001:
+    if error_code == 40001:
         time.sleep(60 * 60 * 24)
     if error_code != 0:
         raise Exception
@@ -142,7 +142,7 @@ def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id, prox,
     temp = r.json()
     error_code = temp['errcode']
     logging.warn('load_game_detail errorcode %s ip is %s' % (error_code, ip))
-    if error_code == 4001:
+    if error_code == 40001:
         time.sleep(60 * 60 * 24)
     if error_code == 0:
         duplicate.record_game(game_seq)
