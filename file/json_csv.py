@@ -2,9 +2,10 @@ import csv
 import json
 import os
 
-
 count = 1
 size = 0
+
+
 def json2csv(json_name, csv_name):
     global count
     with open(csv_name, 'a'):
@@ -70,14 +71,16 @@ def json2csv(json_name, csv_name):
                 'relay_svr_entity': battle['relay_svr_entity'],
                 'game_svr_entity': battle['game_svr_entity']
             })
-            print('current is %d , total %d' % (count, size))
             count = count + 1
 
 
+i = 1
 file_dir = '/Users/emrys/Documents/Moba/MobaBattleList'
 csv_path = '/Users/emrys/Documents/BattleList.csv'
 for root, dirs, files in os.walk(file_dir):
     size = len(files)
     for file in files:
+        print('current is %d , total %d' % (i, size))
+        i = i + 1
         json_file = os.path.join(file_dir, file)
         json2csv(json_file, csv_path)
