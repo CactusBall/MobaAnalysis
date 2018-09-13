@@ -7,6 +7,17 @@ xing_yao = '星耀'
 wang_zhe = '王者'
 nothing = '无段位'
 
+ranks = {
+    qing_tong: [],
+    bai_yin: [],
+    huang_jin: [],
+    bo_jin: [],
+    zuan_shi: [],
+    xing_yao: [],
+    wang_zhe: [],
+    nothing: [],
+}
+
 
 def get_rank_from_code(code):
     if code in [1, 2, 3]:
