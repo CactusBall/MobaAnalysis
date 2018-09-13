@@ -70,9 +70,9 @@ def write_file(hour, week):
     weeks = week.keys()
     for w in weeks:
         week[w] = len(week[w])
-    with open('./battle_hours.json', 'w', encoding='utf-8') as f:
+    with open('./analysis_result/battle_hours.json', 'w', encoding='utf-8') as f:
         f.write(simplejson.dumps(hour, indent=2, sort_keys=True, ensure_ascii=False))
-    with open('./battle_weeks.json', 'w', encoding='utf-8') as f:
+    with open('./analysis_result/battle_weeks.json', 'w', encoding='utf-8') as f:
         f.write(simplejson.dumps(week, indent=2, sort_keys=True, ensure_ascii=False))
 
 
