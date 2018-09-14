@@ -1,3 +1,6 @@
+import pandas as pd
+import simplejson
+
 qing_tong = '青铜'
 bai_yin = '白银'
 huang_jin = '黄金'
@@ -38,4 +41,23 @@ def get_rank_from_code(code):
         return nothing
 
 
-print(get_rank_from_code(19))
+def write_file(ranks):
+    rank_keys = ranks.keys()
+    for r in rank_keys:
+        ranks[r] = len(ranks[r])
+    with open('./analysis_result/ranks_player_count.json', 'w', encoding='utf-8') as f:
+        f.write(simplejson.dumps(ranks, indent=2, sort_keys=True, ensure_ascii=False))
+
+
+def read_user_index(csv_file):
+    csv_data = pd.read_csv(csv_file)
+    rank_data = csv_data['rank_desc']
+    for code in rank_data:
+        rank = get_rank_from_code(code)
+        ranks[rank].append(1)
+
+
+file_path = '/Users/emrys/Documents/Moba/UserIndex.csv'
+read_user_index(file_path)
+write_file(ranks)
+# print(get_rank_from_code(19))

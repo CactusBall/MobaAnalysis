@@ -62,7 +62,7 @@ def load_zone_area_id(open_id, prox, ip):
         logging.warn('duplicate load_zone_area_id')
         return
     # time.sleep(random.randrange(7, 8))
-    time.sleep(2)
+    time.sleep(1.8)
     path = 'cgi-bin/gamewap/getusermobagameindex'
     url = get_url(path)
 
