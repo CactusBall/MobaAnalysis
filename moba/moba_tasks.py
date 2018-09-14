@@ -3,6 +3,7 @@ from kombu import Queue, Exchange
 
 from config import duplicate
 from net import proxies, handlers
+from net.proxies import get_big_proxies
 
 app = Celery('moba_tasks', backend='redis://localhost:6379/0', broker='redis://localhost:6379/0')
 
@@ -23,6 +24,7 @@ def get_user_info(profile_id):
 @app.task
 def get_battle_list(openid, prox, ip):
     try:
+        prox, ip = get_big_proxies()
         error_code, zone_area_id, open_id = handlers.load_zone_area_id(openid, prox, ip)
     except Exception as e:
         return duplicate.is_zone_has(openid)
@@ -35,6 +37,7 @@ def get_battle_list(openid, prox, ip):
 @app.task
 def get_battle_list_p(openid, offset, zone_area_id, prox, ip):
     try:
+        prox, ip = get_big_proxies()
         error_code, battle_list, open_id, has_next, next_offset = handlers.load_user_game_list(openid, offset,
                                                                                                zone_area_id, prox, ip)
     except Exception as e:

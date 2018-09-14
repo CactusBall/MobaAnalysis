@@ -9,7 +9,9 @@ import simplejson
 
 from config import duplicate, settings
 from config.http import get_url, headers, cookies, pass_ticket
+from config.settings import ua
 from net import get_openid_from_url, get_profileid_from_url
+from net.proxies import deprecate_big_ip
 
 
 def _profile(profile_id):
@@ -59,7 +61,8 @@ def load_zone_area_id(open_id, prox, ip):
     if duplicate.is_zone_has(open_id):
         logging.warn('duplicate load_zone_area_id')
         return
-    time.sleep(random.randrange(7, 10))
+    # time.sleep(random.randrange(7, 8))
+    time.sleep(2)
     path = 'cgi-bin/gamewap/getusermobagameindex'
     url = get_url(path)
 
@@ -70,12 +73,16 @@ def load_zone_area_id(open_id, prox, ip):
         'pass_ticket': pass_ticket,
         'QB': ''
     }
+    headers['Referer'] = 'https://game.weixin.qq.com/cgi-bin/h5/static/smobadynamic/dynamic.html?opexnid=' + open_id + '&ssid=3101&abt=27&rpt_allpath=3101&abtest_cookie=BAABAAoACwASABMABAAjlx4AV5keAGmZHgBsmR4AAAA%ds3D&pass_ticket=' + pass_ticket + '&wx_header=1'
     r = requests.get(url, params=params, headers=headers, cookies=cookies, proxies=prox)
     temp = r.json()
     error_code = temp['errcode']
     logging.warn('load_zone_area_id errorcode %s ip is %s' % (error_code, ip))
     if error_code == 40001:
         time.sleep(60 * 60 * 24)
+    if error_code == 45009:
+        # time.sleep(61)
+        deprecate_big_ip(ip)
     if error_code != 0:
         raise Exception
     wfile = os.path.join(settings.Res_Game_Index_Dir, '%s.txt' % _profile(open_id))
@@ -106,12 +113,16 @@ def load_user_game_list(open_id, offset, zone_area_id, prox, ip):
         'zone_area_id': zone_area_id,
         'QB': ''
     }
+    headers['Referer'] = 'https://game.weixin.qq.com/cgi-bin/h5/static/smobadynamic/allbattle.html?openid=' + open_id + '&zone_area_id=' + str(zone_area_id) + '&ssid=1021&uin=&key=&pass_ticket=' + pass_ticket + '&abtest_cookie=BAABAAoACwASABMABAAjlx4AV5keAGmZHgBsmR4AAAA%3D&wx_header=1'
     r = requests.get(url, params=params, headers=headers, cookies=cookies, proxies=prox)
     temp = r.json()
     error_code = temp['errcode']
     logging.warn('load_user_game_list errorcode %s ip is %s openid %s' % (error_code, ip, open_id))
     if error_code == 40001:
         time.sleep(60 * 60 * 24)
+    if error_code == 45009:
+        # time.sleep(61)
+        deprecate_big_ip(ip)
     if error_code != 0:
         raise Exception
     wfile = os.path.join(settings.Res_Battle_List_Dir, '%s.txt' % _profile(open_id))
