@@ -1,7 +1,6 @@
 import codecs
 import logging
 import os
-import random
 import time
 
 import requests
@@ -9,7 +8,6 @@ import simplejson
 
 from config import duplicate, settings
 from config.http import get_url, headers, cookies, pass_ticket
-from config.settings import ua
 from net import get_openid_from_url, get_profileid_from_url
 from net.proxies import deprecate_big_ip
 
@@ -125,7 +123,7 @@ def load_user_game_list(open_id, offset, zone_area_id, prox, ip):
         deprecate_big_ip(ip)
     if error_code != 0:
         raise Exception
-    wfile = os.path.join(settings.Res_Battle_List_Dir, '%s.txt' % _profile(open_id))
+    wfile = os.path.join(settings.Res_Battle_List_Dir, '%s_%s.txt' % (_profile(open_id), offset))
     with codecs.open(wfile, 'w', 'utf-8') as wf:
         wf.write(simplejson.dumps(temp, indent=2, sort_keys=True, ensure_ascii=False))
     duplicate.record_openid(open_id)

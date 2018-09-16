@@ -6,38 +6,46 @@ import simplejson
 
 class Spider:
     _method = ''
+    _url = ''
 
-    def __init__(self, method):
-        self.method = method
+    def __init__(self, method, url):
+        self._method = method
+        self._url = url
 
-    def get(self, url, params):
-        if self.is_duplicate():
+    def request(self, params, headers, cookies):
+        if self.is_duplicate(params):
             return
-        if self._method is 'get':
-            r = requests.get(url, params=params)
-        elif self._method is 'post':
-            r = requests.post(url, data=params)
+        prox = self.get_proxies()
+        if self._method is 'get' or self._method is 'GET':
+            r = requests.get(self._url, params=params, headers=headers, cookies=cookies, proxies=prox, verify=False)
+        elif self._method is 'post' or self._method is 'POST':
+            r = requests.post(self._url, params=params, headers=headers, cookies=cookies, proxies=prox)
         else:
-            r = requests.get(url, params=params)
+            r = requests.get(self._url, params=params, headers=headers, cookies=cookies, proxies=prox)
         temp = r.json()
-        if self.is_error(temp):
-            if self.do_error():
+        print(r.url)
+        code, is_error = self.is_error(temp)
+        print(temp)
+        if is_error:
+            if self.do_error(code):
                 return
-        self.write_file(temp)
-        self.request_end(temp)
+        self.write_file(temp, params)
+        print(temp)
+        return self.request_end(temp)
 
-    def write_file(self, json):
-        wfile = self.get_file()
+    def write_file(self, json, params):
+        wfile = self.get_file_path(params)
         with codecs.open(wfile, 'w', 'utf-8') as wf:
             wf.write(simplejson.dumps(json, indent=2, sort_keys=True, ensure_ascii=False))
+            wf.flush()
 
-    def get_file(self):
+    def get_file_path(self, params):
         """
         get the target file path
         :return: return the write file path.
         """
 
-    def is_duplicate(self):
+    def is_duplicate(self, params):
         """
         is data duplicate
         :return: boolean
@@ -53,8 +61,16 @@ class Spider:
         :return: is error
         """
 
-    def do_error(self):
+    def do_error(self, code):
         """
         do something when error
         :return: is give up when error
+        """
+
+    def get_proxies(self):
+        """
+        get network proxies
+        :return: {
+
+        }
         """
