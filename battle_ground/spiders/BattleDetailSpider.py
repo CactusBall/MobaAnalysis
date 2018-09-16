@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 
@@ -62,15 +63,15 @@ class BattleDetailSpider(Spider):
 
     def is_error(self, data):
         errorcode = data['errcode']
-        if errorcode is 0:
+        if errorcode == 0:
             return 0, False
         else:
             return errorcode, True
 
     def do_error(self, code):
-        if code is 40001:
+        if code == 40001:
             time.sleep(60 * 60 * 24)
-        elif code is 45009:
+        elif code == 45009:
             time.sleep(60)
         return True
 

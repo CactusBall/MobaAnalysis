@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 
@@ -64,13 +65,12 @@ class BattleListSpider(Spider):
             return errorcode, True
 
     def do_error(self, code):
-        if code is 40001:
+        if code == 40001:
             time.sleep(60 * 60 * 24)
-        elif code is 45009:
+        elif code == 45009:
             time.sleep(60)
         return True
 
     def request_end(self, params, data):
-        print('sadasfscmjanweqiflen')
         duplicate.record_user(params['openid'])
         return data['errcode'], data['has_next'], data['next_after_time'], data['battle_list']

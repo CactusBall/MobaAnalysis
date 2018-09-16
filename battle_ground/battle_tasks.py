@@ -1,10 +1,12 @@
+import logging
+
 from celery import Celery
 from kombu import Queue, Exchange
 
 import spiders
 from configs import duplicate
 
-app = Celery('battle_tasks', backend='redis://localhost:6379/0', broker='redis://localhost:6379/0')
+app = Celery('battle_tasks', backend='redis://localhost:6379/1', broker='redis://localhost:6379/1')
 
 
 @app.task
