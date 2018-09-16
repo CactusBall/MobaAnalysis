@@ -2,7 +2,7 @@ from celery import Celery
 from kombu import Queue, Exchange
 
 import spiders
-from config import duplicate
+from configs import duplicate
 
 app = Celery('battle_tasks', backend='redis://localhost:6379/0', broker='redis://localhost:6379/0')
 
@@ -18,7 +18,7 @@ def get_battle_list(openid, after_time):
         error_code, has_next, next_after_time, battle_list = holder.request(
             params, heaeders, cookies)
     except Exception as e:
-        return duplicate.is_user_openid_has(openid)
+        return duplicate.is_user_has(openid)
     if error_code != 0:
         return 2
     if has_next:
@@ -56,7 +56,7 @@ task_queues = (
 )
 
 task_routes = {
-    'moba_tasks.get_battle_info': {'queue': 'queue_get_battle_info', 'routing_key': 'gbi'},
-    'moba_tasks.get_battle_list': {'queue': 'queue_get_battle_list', 'routing_key': 'gbl'},
+    'battle_tasks.get_battle_info': {'queue': 'queue_get_battle_info', 'routing_key': 'gbi'},
+    'battle_tasks.get_battle_list': {'queue': 'queue_get_battle_list', 'routing_key': 'gbl'},
 }
 app.conf.update(CELERY_QUEUES=task_queues, CELERY_ROUTES=task_routes)

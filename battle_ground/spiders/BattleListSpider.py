@@ -1,11 +1,11 @@
 import os
 import time
 
-from CactusSpider import Spider
 from configs import http, duplicate
 from configs.duplicate import is_user_has
 from configs.settings import pass_ticket, key
-from net import proxies
+from nets import proxies
+from spiders.CactusSpider import Spider
 
 
 def _battle_list(openid):

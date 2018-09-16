@@ -1,12 +1,11 @@
 import os
 import time
 
-from CactusSpider import Spider
 from configs import http, duplicate
 from configs.duplicate import is_battle_has
 from configs.settings import pass_ticket, key
-from net import get_openid_from_url, proxies
-from net.proxies import get_big_proxies
+from nets import get_openid_from_url, proxies
+from spiders.CactusSpider import Spider
 
 
 def _battle_info(game_id):
