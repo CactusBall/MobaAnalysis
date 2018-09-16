@@ -7,7 +7,7 @@ from net.proxies import fill_ip
 
 # fill_ip()
 profile_id = 'g1NlbysGi4KDI5aTA0V-65f9QlaA'
-# r = get_user_info.delay(profile_id)
+r = get_user_info.delay(profile_id)
 # while not r.ready():
 #     time.sleep(1)
 # print(redis.scard('_ip_pool'))

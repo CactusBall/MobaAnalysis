@@ -2,11 +2,10 @@ import os
 import time
 
 from CactusSpider import Spider
-from configs import http
+from configs import http, duplicate
 from configs.duplicate import is_user_has
 from configs.settings import pass_ticket, key
 from net import proxies
-from net.proxies import get_big_proxies
 
 
 def _battle_list(openid):
@@ -71,5 +70,7 @@ class BattleListSpider(Spider):
             time.sleep(60)
         return True
 
-    def request_end(self, data):
+    def request_end(self, params, data):
+        print('sadasfscmjanweqiflen')
+        duplicate.record_user(params['openid'])
         return data['errcode'], data['has_next'], data['next_after_time'], data['battle_list']

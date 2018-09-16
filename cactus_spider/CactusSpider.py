@@ -23,15 +23,13 @@ class Spider:
         else:
             r = requests.get(self._url, params=params, headers=headers, cookies=cookies, proxies=prox)
         temp = r.json()
-        print(r.url)
         code, is_error = self.is_error(temp)
-        print(temp)
         if is_error:
             if self.do_error(code):
                 return
         self.write_file(temp, params)
-        print(temp)
-        return self.request_end(temp)
+        print(params)
+        return self.request_end(params, temp)
 
     def write_file(self, json, params):
         wfile = self.get_file_path(params)
@@ -51,7 +49,7 @@ class Spider:
         :return: boolean
         """
 
-    def request_end(self, data):
+    def request_end(self, params, data):
         """do something when request finished."""
 
     def is_error(self, data):

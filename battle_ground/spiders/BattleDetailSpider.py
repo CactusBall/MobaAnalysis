@@ -2,7 +2,7 @@ import os
 import time
 
 from CactusSpider import Spider
-from configs import http
+from configs import http, duplicate
 from configs.duplicate import is_battle_has
 from configs.settings import pass_ticket, key
 from net import get_openid_from_url, proxies
@@ -75,8 +75,8 @@ class BattleDetailSpider(Spider):
             time.sleep(60)
         return True
 
-
-    def request_end(self, data):
+    def request_end(self, params, data):
+        duplicate.record_game(params['battle_id'])
         prey_list = data['prey_info']['prey_list']
         user_list = []
         for p in prey_list:
