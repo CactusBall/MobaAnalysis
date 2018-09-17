@@ -1,8 +1,8 @@
 import spiders
 from battle_tasks import get_battle_list
-openid = 'osewR0szPXJyn9Gg2Xhvjb-_X71s'
+openid = 'osewR0iVn5h4fJzA4OsOWiAR6WzI'
 after_time = 0
-get_battle_list.delay(openid, after_time)
+get_battle_list.delay(openid, 0, after_time)
 # holder = spiders.battle_list_holder
 # from spiders.BattleListSpider import get_params, get_headers, get_cookies
 #

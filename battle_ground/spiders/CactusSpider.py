@@ -16,8 +16,12 @@ class Spider:
 
     def request(self, params, headers, cookies):
         if self.is_duplicate(params):
+            if 'battle_id' in params:
+                logging.warn('duplicate %s ' % params['battle_id'])
+            if 'openid' in params:
+                logging.warn('duplicate %s ' % params['openid'])
             return
-        time.sleep(3.6)
+        time.sleep(4.5)
         prox = self.get_proxies()
         if self._method is 'get' or self._method is 'GET':
             r = requests.get(self._url, params=params, headers=headers, cookies=cookies, proxies=prox)
@@ -26,7 +30,11 @@ class Spider:
         else:
             r = requests.get(self._url, params=params, headers=headers, cookies=cookies, proxies=prox)
         temp = r.json()
+        # print(r.url)
+        # print(r.headers)
+        # print(r.cookies)
         code, is_error = self.is_error(temp)
+        # logging.warn(temp)
         logging.warn('errorcode %s is Error %s' % (code, is_error))
         if is_error:
             is_return = self.do_error(code)

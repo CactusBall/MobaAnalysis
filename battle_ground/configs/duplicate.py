@@ -1,8 +1,10 @@
+import logging
+
 import configs
 
 
-def _user_id(openid):
-    return 'bl_%s' % openid
+def _user_id(openid, time, plat_id):
+    return 'bl_%s_%s_%s' % (openid, time, plat_id)
 
 
 def _battle_detail(game_id):
@@ -17,13 +19,13 @@ def is_battle_has(game_id):
     return configs.redis.hexists(_gameseq_key, _battle_detail(game_id))
 
 
-def is_user_has(openid):
-    return configs.redis.hexists(_user_key, _user_id(openid))
+def is_user_has(openid, time, plat_id):
+    return configs.redis.hexists(_user_key, _user_id(openid, time, plat_id))
 
 
 def record_game(game_id):
     configs.redis.hset(_gameseq_key, _battle_detail(game_id), game_id)
 
 
-def record_user(openid):
-    configs.redis.hset(_user_key, _user_id(openid), openid)
+def record_user(openid, time, plat_id):
+    configs.redis.hset(_user_key, _user_id(openid, time, plat_id), openid)

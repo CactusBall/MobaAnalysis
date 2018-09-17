@@ -13,11 +13,11 @@ def _battle_info(game_id):
     return 'battle_%s' % game_id
 
 
-def get_params(openid, team_id, battle_id, mode, dt_event_time):
+def get_params(openid, team_id, plat_id, battle_id, mode, dt_event_time):
     return {
         'openid': openid,
         'team_id': team_id,
-        'plat_id': 0,
+        'plat_id': plat_id,
         'battle_id': battle_id,
         'mode': mode,
         'dt_event_time': dt_event_time,
@@ -87,4 +87,4 @@ class BattleDetailSpider(Spider):
             else:
                 continue
             user_list.append(openid)
-        return data['errcode'], user_list
+        return data['errcode'], params['plat_id'], user_list

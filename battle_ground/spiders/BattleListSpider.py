@@ -13,10 +13,10 @@ def _battle_list(openid):
     return 'list_%s' % openid
 
 
-def get_params(openid, after_time):
+def get_params(openid, plat_id, after_time):
     return {
         'openid': openid,
-        'plat_id': 0,
+        'plat_id': plat_id,
         'limit': 20,
         'mode_type': 2,
         'after_time': after_time,
@@ -47,7 +47,7 @@ def get_cookies():
 class BattleListSpider(Spider):
 
     def is_duplicate(self, params):
-        return is_user_has(params['openid']) and params['after_time'] is 0
+        return is_user_has(params['openid'], params['after_time'], params['plat_id'])
 
     def get_proxies(self):
         return proxies.get_proxies()[0]
@@ -72,5 +72,5 @@ class BattleListSpider(Spider):
         return True
 
     def request_end(self, params, data):
-        duplicate.record_user(params['openid'])
-        return data['errcode'], data['has_next'], data['next_after_time'], data['battle_list']
+        duplicate.record_user(params['openid'], params['after_time'], params['plat_id'])
+        return data['errcode'], params['plat_id'], data['has_next'], data['next_after_time'], data['battle_list']
