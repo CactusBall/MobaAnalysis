@@ -157,7 +157,7 @@ def load_game_detail(game_seq, game_svr_entity, relay_svr_entity, open_id, prox,
         duplicate.record_game(game_seq)
     player_list = temp['normal_battle_detail']['user_battle_detail']
     if len(player_list) != 0:
-        wfile = os.path.join(settings.Res_Battle_Detail_Dir, '%s.txt' % _profile(game_seq))
+        wfile = os.path.join(settings.Res_Battle_Detail_Dir, '%s.txt' % _battle_info(game_seq))
         with codecs.open(wfile, 'w', 'utf-8') as wf:
             wf.write(simplejson.dumps(temp, indent=2, sort_keys=True, ensure_ascii=False))
     profile_ids = []
