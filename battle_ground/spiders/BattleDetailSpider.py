@@ -25,7 +25,7 @@ def get_params(openid, team_id, plat_id, battle_id, mode, dt_event_time):
         'uin': '',
         'key': '',
         'pass_ticket': pass_ticket,
-        'QB': ''
+        'QB': '',
     }
 
 
