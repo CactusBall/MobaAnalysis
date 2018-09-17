@@ -8,7 +8,7 @@ count = 1
 def dump_battle_list_to_csv(json_name, csv_writer):
     global count
     json_path = os.path.join(file_dir, json_name)
-    game_seq = json_name[8:-4]
+    game_seq = json_name[7:-4]
     with open(json_path, 'r') as data_json:
         data_dict = json.loads(data_json.read())
         battle = data_dict['normal_battle_detail']
@@ -74,5 +74,5 @@ def start():
 
 
 # start()
-s = 'profile_1536244790.txt'
-print(s[8:-4])
+s = 'battle_1536244790.txt'
+print(s[7:-4])
