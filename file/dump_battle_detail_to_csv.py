@@ -73,6 +73,4 @@ def start():
                 print('''current is %s, total %s''' % (count, size))
 
 
-# start()
-s = 'battle_1536244790.txt'
-print(s[7:-4])
+start()
